@@ -11,7 +11,7 @@ const client = new Client({
     // Add other intents as needed
   ],
 });
-require("dotenv").config();
+const PROCESS = require("dotenv").config();
 
 client.once("ready", () => {
   console.log(`Logged in as ${client.user.tag}`);
@@ -63,4 +63,4 @@ client.on("messageCreate", async (message) => {
   }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(PROCESS.parsed.DISCORD_TOKEN);
