@@ -8,7 +8,6 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-    // Add other intents as needed
   ],
 });
 const PROCESS = require("dotenv").config();
@@ -40,13 +39,13 @@ client.on("messageCreate", async (message) => {
     message.content === "Eu quero criar um projeto" &&
     message.channelId === "1281857314587934751"
   ) {
-    const roleId = "1282059717027299439"; // Replace with your role ID
+    const roleId = "1282059717027299439";
 
     try {
       const thread = await message.channel.threads.create({
         name: `Novo projeto do ${message.author.username}`,
-        autoArchiveDuration: ThreadAutoArchiveDuration.OneHour, // Or use ThreadAutoArchiveDuration values
-        type: 11, // Use integer for GUILD_PRIVATE_THREAD
+        autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
+        type: 11,
         reason: "Thread created for user interaction",
       });
 
