@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon --watch './**/*.ts' --exec ts-node index.ts"
   },
   "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/ws": "^8.5.12",
     "discord.js": "^14.16.1",
     "dotenv": "^16.4.5",
-    "my-discord-bot": "file:"
+    "my-discord-bot": "file:",
+    "typescript": "^5.5.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "ts-node": "^10.9.2"
   }
 }
