@@ -1,4 +1,4 @@
-import { Client, REST, Routes, SlashCommandBuilder, TextChannel, ThreadAutoArchiveDuration, } from "discord.js";
+import { Client, CommandInteraction, Interaction, REST, Routes, TextChannel, ThreadAutoArchiveDuration, } from "discord.js";
 import * as commandModules from "./commands"
 import { env } from './config/env'
 
@@ -19,6 +19,7 @@ export class Bot {
 
         this.registerCommands()
         this.onMessageInteract()
+        this.onInteractionCreate()
 
     }
 
@@ -27,17 +28,15 @@ export class Bot {
 
         const commands: any = [];
 
-        // Ensure that commandModules is correctly populated with commands
         for (const module of Object.values<{ data: unknown }>(commandModules)) {
-            commands.push(module.data) // Convert SlashCommandBuilder to JSON format
+            commands.push(module.data)
         }
 
         try {
-            console.log('Started refreshing application (/) commands.', commands);
+            console.log('Started refreshing application (/) commands.');
 
-            // Use applicationGuildCommands if you're updating for a specific guild, or applicationCommands for global commands
             await rest.put(
-                Routes.applicationGuildCommands(env.CLIENT_ID, env.DISCORD_SERVER_ID), // or Routes.applicationCommands(env.CLIENT_ID)
+                Routes.applicationGuildCommands(env.CLIENT_ID, env.DISCORD_SERVER_ID),
                 {
                     body: commands,
                 }
@@ -49,23 +48,19 @@ export class Bot {
         }
     }
 
-    // private async onCommandInteract() {
-    //     this.client.on("interactionCreate", async interaction => {
-    //         console.log('Passou')
-    //         if (!interaction.isCommand()) return;
+    private async onInteractionCreate() {
+        this.client.on('interactionCreate', async (interaction) => {
+            if (interaction.isCommand()) {
+                const { commandName } = interaction
+                this.commands[commandName].execute(interaction, this.client)
+            }
 
-    //         const { commandName } = interaction
-
-    //         if (commandName === 'createcategory') {
-    //             const categoryName = interaction.options.getMember('categoryname')?.toString()!
-    //             const guild = interaction.guild!
-
-    //             this.command.createCategoryWithChannels(guild, categoryName)
-
-    //             await interaction.reply(`Category "${categoryName}" created with channels`)
-    //         }
-    //     })
-    // }
+            if (interaction.isAutocomplete()) {
+                const { commandName } = interaction
+                this.commands[commandName].autocomplete(interaction, this.client)
+            }
+        })
+    }
 
     private async onMessageInteract() {
         this.client.on("messageCreate", async (message) => {
@@ -111,7 +106,6 @@ export class Bot {
                         `Uma thread foi criada para você expor suas ideias, <@${userId}>.`
                     );
                 } catch (error) {
-                    console.error("Error creating thread:", error);
                     await message.channel.send("There was an error creating the thread.");
                 }
             }
