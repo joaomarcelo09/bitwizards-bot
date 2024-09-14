@@ -2,6 +2,7 @@ import { Client, CommandInteraction, Interaction, REST, Routes, TextChannel, Thr
 import * as commandModules from "./commands"
 import { env } from './config/env'
 
+var cron = require('node-cron');
 const PROCESS = require("dotenv").config();
 
 export class Bot {
@@ -20,6 +21,15 @@ export class Bot {
         this.registerCommands()
         this.onMessageInteract()
         this.onInteractionCreate()
+        // this.registerCron()
+
+    }
+
+    private async registerCron() {
+
+        cron.schedule('* * * * * *', () => {
+            console.log('cron is running')
+        })
 
     }
 
@@ -36,7 +46,7 @@ export class Bot {
             console.log('Started refreshing application (/) commands.');
 
             await rest.put(
-                Routes.applicationGuildCommands(env.CLIENT_ID, env.DISCORD_SERVER_ID),
+                Routes.applicationCommands(env.CLIENT_ID),
                 {
                     body: commands,
                 }

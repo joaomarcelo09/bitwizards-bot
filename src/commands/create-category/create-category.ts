@@ -7,7 +7,7 @@ export const data = new SlashCommandBuilder().setName('createcategory').setDescr
 
 export async function execute(interaction: CommandInteraction) {
 
-    const requiredRoleId = "1072250960837099700"
+    const requiredRoleId = interaction.guild?.roles.highest.id!
 
     await interaction.deferReply();
 
@@ -24,7 +24,7 @@ export async function execute(interaction: CommandInteraction) {
         const guild = interaction.guild!
 
         await createCategoryWithChannels(guild, formatName)
-        await interaction.followUp(`Category "${categoryName}" created with channels`)
+        await interaction.followUp(`Category "${formatName}" created with channels`)
     } catch (error) {
         await interaction.followUp('There was an error creating the category.');
     }
