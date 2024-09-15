@@ -1,6 +1,7 @@
 import { Client, CommandInteraction, Interaction, REST, Routes, TextChannel, ThreadAutoArchiveDuration, } from "discord.js";
 import * as commandModules from "./commands"
 import { env } from './config/env'
+import { SchedulerService } from "./jgorm/services/schedule-service";
 
 var cron = require('node-cron');
 const PROCESS = require("dotenv").config();
@@ -21,15 +22,25 @@ export class Bot {
         this.registerCommands()
         this.onMessageInteract()
         this.onInteractionCreate()
-        // this.registerCron()
+        this.registerCron()
 
     }
 
     private async registerCron() {
 
-        cron.schedule('* * * * * *', () => {
-            console.log('cron is running')
-        })
+        const messageData = {
+            message: "Dont forget the meeting at Monday!",
+            day_of_week: 'Monday',
+            time: '09:00',
+            channel_id: '1234567890',
+        };
+
+        const result = await SchedulerService.scheduleMessage(messageData);
+        console.log('Message scheduled:', result);
+
+        // cron.schedule('* * * * * *', () => {
+        //     console.log('cron is running')
+        // })
 
     }
 

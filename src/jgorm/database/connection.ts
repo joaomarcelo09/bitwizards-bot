@@ -1,4 +1,5 @@
 import { Client } from 'pg'
+import { Migrations } from '../models/migration';
 
 export default class JGORM {
     private static client: Client
@@ -17,6 +18,7 @@ export default class JGORM {
             });
             await this.client.connect();
         }
+
         return this.client;
     }
 
