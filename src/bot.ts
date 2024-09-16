@@ -27,42 +27,25 @@ export class Bot {
     }
 
     private async registerCron() {
-
-        const messageData = {
-            message: "Dont forget the meeting at Monday!",
-            day_of_week: 'Monday',
-            time: '09:00',
-            channel_id: '1234567890',
-        };
-
-        const result = await SchedulerService.scheduleMessage(messageData);
-        console.log('Message scheduled:', result);
-
-        // cron.schedule('* * * * * *', () => {
-        //     console.log('cron is running')
-        // })
-
+        cron.schedule('0 9 * * *', () => {
+            SchedulerService.sendScheduleMessages(this.client)
+        })
     }
 
     private async registerCommands() {
         const rest = new REST({ version: '10' }).setToken(env.DISCORD_TOKEN);
-
         const commands: any = [];
-
         for (const module of Object.values<{ data: unknown }>(commandModules)) {
             commands.push(module.data)
         }
-
         try {
             console.log('Started refreshing application (/) commands.');
-
             await rest.put(
                 Routes.applicationCommands(env.CLIENT_ID),
                 {
                     body: commands,
                 }
             );
-
             console.log('Successfully reloaded application (/) commands.');
         } catch (error) {
             console.error('Error registering commands:', error);
