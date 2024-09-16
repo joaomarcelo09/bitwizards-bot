@@ -1,5 +1,5 @@
 import { Client } from 'pg'
-import { Migrations } from '../models/migration';
+const PROCESS = require("dotenv").config();
 
 export default class JGORM {
     private static client: Client
@@ -7,16 +7,17 @@ export default class JGORM {
     static async connect() {
         if (!this.client) {
             this.client = new Client({
-                user: 'tododb_owner',
-                host: 'ep-wild-truth-a5ncxzy2.us-east-2.aws.neon.tech',
-                database: 'bitbotdb',
-                password: 'oydwhK9V1nFX',
+                user: PROCESS.parsed.DB_USER,
+                host: PROCESS.parsed.DB_HOST,
+                database: PROCESS.parsed.DB_DATABASE,
+                password: PROCESS.parsed.DB_PASSWORD,
                 port: 5432,
                 ssl: {
                     rejectUnauthorized: false
                 }
             });
             await this.client.connect();
+            console.log('connected db')
         }
 
         return this.client;
