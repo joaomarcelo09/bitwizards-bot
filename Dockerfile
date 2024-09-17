@@ -5,8 +5,7 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Set default environment variables
-ENV NODE_ENV=production
-ENV PORT=3000
+ARG RAILWAY_ENVIRONMENT
 
 # Copy the package.json and pnpm-lock.yaml first for dependency installation
 COPY package.json pnpm-lock.yaml ./
