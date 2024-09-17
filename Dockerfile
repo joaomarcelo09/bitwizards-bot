@@ -1,26 +1,26 @@
-# Use an official Node.js runtime as a parent image
+# Use Node.js image as a base
 FROM node:18-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install pnpm globally
-RUN npm install -g pnpm
-
-# Copy the package.json and pnpm-lock.yaml to the container
+# Copy the package.json and pnpm-lock.yaml first for dependency installation
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies using pnpm
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy the rest of the project files
+# Copy the rest of the application files
 COPY . .
 
 # Build the TypeScript files
 RUN pnpm run build
 
-# Expose the port that your app will run on
+# Expose the port (if your app runs on a port, adjust if necessary)
 EXPOSE 3000
 
-# Start the application
+# Start the app using the compiled JavaScript files
 CMD ["pnpm", "start"]
