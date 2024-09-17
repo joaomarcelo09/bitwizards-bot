@@ -1,5 +1,5 @@
 import { Client } from 'pg'
-const PROCESS = require("dotenv").config();
+import { env } from '../../config/env'
 
 export default class JGORM {
     private static client: Client
@@ -7,7 +7,7 @@ export default class JGORM {
     static async connect() {
         if (!this.client) {
             this.client = new Client({
-                connectionString: PROCESS.parsed.DATABASE_URL
+                connectionString: env.DATABASE_URL
             });
             await this.client.connect();
             console.log('connected db')

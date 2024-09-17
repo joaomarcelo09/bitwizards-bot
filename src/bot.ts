@@ -4,12 +4,11 @@ import { env } from './config/env'
 import { SchedulerService } from "./jgorm/services/schedule-service";
 
 var cron = require('node-cron');
-const PROCESS = require("dotenv").config();
 
 export class Bot {
     public commands = Object(commandModules)
     constructor(public readonly client: Client) {
-        client.login(PROCESS.parsed.DISCORD_TOKEN);
+        client.login(env.DISCORD_TOKEN);
 
         client.once("ready", (bot) => {
             console.log(`Logged in as ${bot.user.tag}`);
