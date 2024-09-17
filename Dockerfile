@@ -4,6 +4,10 @@ FROM node:18-alpine
 # Set the working directory inside the container
 WORKDIR /app
 
+# Set default environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+
 # Copy the package.json and pnpm-lock.yaml first for dependency installation
 COPY package.json pnpm-lock.yaml ./
 
