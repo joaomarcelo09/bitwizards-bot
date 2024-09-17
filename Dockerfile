@@ -23,4 +23,4 @@ RUN pnpm run build
 EXPOSE 3000
 
 # Start the app using the compiled JavaScript files
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start:build"]

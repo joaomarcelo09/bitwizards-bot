@@ -4,6 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "start:build": "ts-node src/index.js",
     "build": "tsc"
   },
   "dependencies": {
