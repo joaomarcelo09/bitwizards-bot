@@ -4,8 +4,6 @@ FROM node:18-alpine
 # Set the working directory inside the container
 WORKDIR /app
 
-COPY .env .env
-
 # Copy the package.json and pnpm-lock.yaml first for dependency installation
 COPY package.json pnpm-lock.yaml ./
 
