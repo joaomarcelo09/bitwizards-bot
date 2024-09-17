@@ -7,14 +7,7 @@ export default class JGORM {
     static async connect() {
         if (!this.client) {
             this.client = new Client({
-                user: PROCESS.parsed.DB_USER,
-                host: PROCESS.parsed.DB_HOST,
-                database: PROCESS.parsed.DB_DATABASE,
-                password: PROCESS.parsed.DB_PASSWORD,
-                port: 5432,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                connectionString: PROCESS.parsed.DATABASE_URL
             });
             await this.client.connect();
             console.log('connected db')
