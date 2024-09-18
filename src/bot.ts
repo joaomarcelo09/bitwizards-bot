@@ -37,9 +37,9 @@ export class Bot {
     cron.schedule("0 9 * * *", () => {
       SchedulerService.sendScheduleMessages(this.client);
     });
-    cron.schedule("* * * *", () => {
+    cron.schedule("0 * * * *", () => {
       JGORM.refreshConnection();
-      console.log("refresh connection");
+      console.log("Refresh connection");
     });
   }
 
