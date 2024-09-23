@@ -11,7 +11,6 @@ import * as commandModules from "./commands";
 import { env } from "./config/env";
 import { SchedulerService } from "./jgorm/services/schedule-service";
 import JGORM from "./jgorm/database/connection";
-import axios from "axios";
 
 var cron = require("node-cron");
 
