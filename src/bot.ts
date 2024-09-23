@@ -11,6 +11,7 @@ import * as commandModules from "./commands";
 import { env } from "./config/env";
 import { SchedulerService } from "./jgorm/services/schedule-service";
 import JGORM from "./jgorm/database/connection";
+import axios from "axios";
 
 var cron = require("node-cron");
 
@@ -34,12 +35,15 @@ export class Bot {
   }
 
   private async registerCron() {
-    cron.schedule("0 9 * * *", () => {
-      SchedulerService.sendScheduleMessages(this.client);
+    cron.schedule("0 9 * * *", async () => {
+      await JGORM.refreshConnection();
+
+      await SchedulerService.sendScheduleMessages(this.client);
     });
-    cron.schedule("0 * * * *", () => {
-      JGORM.refreshConnection();
-      console.log("Refresh connection");
+    cron.schedule("* * * * *", async () => {
+      await JGORM.refreshConnection();
+      // this.onXuliaInteract(this.client);
+      console.log("refresh connection");
     });
   }
 
@@ -73,6 +77,60 @@ export class Bot {
       }
     });
   }
+
+  // private async onXuliaInteract(client: Client) {
+  //   const server_id = "1063084604917030922";
+  //   const channelId = "1286467309669449809";
+  //   const prompt = "Escreva uma mensagem gentil e amorosa para minha namorada";
+
+  //   try {
+  //     // Step 1: Fetch the Discord channel
+  //     const guild: any = await client.guilds.fetch(server_id);
+  //     const channel = (await guild.channels.fetch(channelId)) as TextChannel;
+  //     if (!channel || !channel.isTextBased()) {
+  //       console.error("Invalid channel");
+  //       return;
+  //     }
+
+  //     // Step 2: Make a request to OpenAI GPT API
+  //     const gptResponse = await this.generateText(prompt);
+
+  //     if (gptResponse) {
+  //       // Step 3: Send the GPT response to the Discord channel
+  //       await channel.send(gptResponse);
+  //     } else {
+  //       await channel.send("Sorry, I could not generate a response.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error interacting with OpenAI or sending message:", error);
+  //   }
+  // }
+
+  // private async generateText(prompt: string) {
+  //   const key = "MACrD8yh8WYSx2toCghTO8wggJzMSyIOILBwcOi7";
+  //   try {
+  //     const response = await axios.post(
+  //       "https://api.cohere.ai/generate",
+  //       {
+  //         model: "command-light", // Free model
+  //         prompt: prompt,
+  //         max_tokens: 100, // Limit the response length
+  //         temperature: 0.7, // Adjust creativity level
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${key}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     // console.log("Generated Text:", response.data.generations[0].text);
+  //     return response.data.text;
+  //   } catch (error) {
+  //     console.error("Error generating text:", error);
+  //   }
+  // }
 
   private async onMessageInteract() {
     this.client.on("messageCreate", async (message) => {
