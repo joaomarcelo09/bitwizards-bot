@@ -20,7 +20,7 @@ export class Bot {
     client.login(env.DISCORD_TOKEN);
 
     client.once("ready", (bot) => {
-      console.log(`Logged in as ${bot.user.tag}`);
+      console.log(`Logged in as ${bot.user.tag} in port ${env.PORT}`);
     });
 
     this.client.once("shardError", (error) => {
