@@ -39,7 +39,7 @@ export class Bot {
 
       await SchedulerService.sendScheduleMessages(this.client);
     });
-    cron.schedule("0 * * * *", async () => {
+    cron.schedule("*/10 * * * *", async () => {
       await JGORM.refreshConnection();
       // this.onXuliaInteract(this.client);
       console.log("refresh connection");
